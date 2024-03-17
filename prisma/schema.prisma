@@ -19,13 +19,15 @@ model Candidate {
   firstName   String
   lastName    String
   email       String    @unique
+  password    String
   gender      String
+  isAdmin     Boolean    @default(false)
   status      CandidateStatus? 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
-// Define the model for the Job entity
+
 model Job {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title       String
