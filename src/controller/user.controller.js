@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const prisma = require("../../prisma");
 
 const handleRegister = async (req, res) => {
   try {
@@ -59,7 +60,18 @@ const handleLogin = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
     });
 
-    res.status(200).json({ success: true, message: "Login successful" });
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: candidate.id,
+        firstName: candidate.firstName,
+        lastName: candidate.lastName,
+        email: candidate.email,
+        gender: candidate.gender,
+        isAdmin: candidate.isAdmin,
+      },
+    });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Internal server error" });
