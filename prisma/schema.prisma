@@ -24,6 +24,7 @@ model Candidate {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   appliedJobs Job[]   @relation("AppliedJobs")
+   @@map("candidate")
 }
 
 model Applicant {
@@ -36,6 +37,13 @@ model Applicant {
   status    CandidateStatus?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model Admin {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String    @unique
+  password  String
 }
 
 model Job {
@@ -62,6 +70,7 @@ model Recruiter {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   jobs      Job[]     @relation("RecruiterJobs")
+  @@map("recruiter")
 }
 
 enum CandidateStatus {
