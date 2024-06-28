@@ -20,7 +20,7 @@ model Candidate {
   email     String    @unique
   password  String
   gender    String
-  status    CandidateStatus?
+  status    CandidateStatus?  @default(PENDING)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   appliedJobs Job[]   @relation("AppliedJobs")
@@ -77,4 +77,5 @@ enum CandidateStatus {
   SHORTLISTED
   REJECTED
   SELECTED
+  PENDING
 }

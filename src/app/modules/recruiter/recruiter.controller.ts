@@ -1,20 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
-import { CandidateService } from './candidate.service';
+import { NextFunction, Request, Response } from 'express';
+import { RecruiterService } from './recruiter.service';
+import { Recruiter } from '@prisma/client';
 import sendResponse from '../../../shared/sendResponse';
-import { Candidate } from '@prisma/client';
 import httpStatus from 'http-status';
 
-const createCandidate = async (
+const createRecruiter = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const result = await CandidateService.create(req.body);
-    sendResponse<Candidate>(res, {
+    const result = await RecruiterService.create(req.body);
+    sendResponse<Recruiter>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Candidate Account Created Successfully',
+      message: 'Recruiter Account Created Successfully',
       data: result,
     });
   } catch (error) {
@@ -30,14 +30,14 @@ const createCandidate = async (
   }
 };
 
-const loginCandidate = async (
+const loginRecruiter = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { email, password } = req.body;
-    const result = await CandidateService.login(email, password);
+    const result = await RecruiterService.login(email, password);
 
     // Store the token in a cookie
     res.cookie('token', result.token, {
@@ -46,15 +46,23 @@ const loginCandidate = async (
       maxAge: 3600000, // 1 hour
     });
 
+    // Extract required fields
+    const {
+      firstName,
+      lastName,
+      email: recruiterEmail,
+      gender,
+    } = result.recruiter;
+
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Login Successful',
-      data: result.candidate,
+      data: { firstName, lastName, recruiterEmail, gender },
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const CandidateController = { createCandidate, loginCandidate };
+export const RecruiterController = { createRecruiter, loginRecruiter };

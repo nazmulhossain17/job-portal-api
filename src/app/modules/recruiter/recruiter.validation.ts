@@ -33,4 +33,4 @@ const login = z.object({
   }),
 });
 
-export const CandidateValidation = { create, login };
+export const RecruiterValidation = { create, login };

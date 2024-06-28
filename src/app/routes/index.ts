@@ -1,5 +1,7 @@
 import express from 'express';
 import { AdminRoutes } from '../modules/admin/admin.routes';
+import { CandidateRoutes } from '../modules/candidate/candidate.routes';
+import { RecruiterRoutes } from '../modules/recruiter/recruiter.routes';
 
 const router = express.Router();
 
@@ -8,6 +10,14 @@ const moduleRoutes = [
   {
     path: '/admin',
     route: AdminRoutes,
+  },
+  {
+    path: '/candidate',
+    route: CandidateRoutes,
+  },
+  {
+    path: '/recruiter',
+    route: RecruiterRoutes,
   },
 ];
 
