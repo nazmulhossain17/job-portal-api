@@ -1,4 +1,4 @@
-import { Recruiter } from '@prisma/client';
+import { Recruiter, Role } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import bcrypt from 'bcrypt';
 import config from '../../../config';
@@ -12,8 +12,16 @@ const create = async (data: Recruiter): Promise<Recruiter> => {
   if (existingRecruiter) {
     throw new Error('Email already exists');
   }
+
+  // Ensure 'role' is set to 'RECRUITER' for default
+  data.role = Role.RECRUITER;
+
+  // Hash the password
   data.password = await bcrypt.hash(data.password, 10);
+
+  // Create the recruiter with all data fields included
   const result = await prisma.recruiter.create({ data });
+
   return result;
 };
 
@@ -33,9 +41,9 @@ const login = async (
     throw new Error('Invalid credentials');
   }
 
-  // Generate JWT
+  // Generate JWT with only id and role in the payload
   const token = jwt.sign(
-    { id: recruiter.id, email: recruiter.email },
+    { id: recruiter.id, role: recruiter.role },
     config.jwtSecret as string,
     {
       expiresIn: '1h',

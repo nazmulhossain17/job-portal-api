@@ -44,5 +44,4 @@ const login = async (
 
   return { token, candidate };
 };
-
 export const CandidateService = { create, login };

@@ -48,6 +48,7 @@ const loginRecruiter = async (
 
     // Extract required fields
     const {
+      id,
       firstName,
       lastName,
       email: recruiterEmail,
@@ -58,7 +59,7 @@ const loginRecruiter = async (
       statusCode: httpStatus.OK,
       success: true,
       message: 'Login Successful',
-      data: { firstName, lastName, recruiterEmail, gender },
+      data: { id, firstName, lastName, recruiterEmail, gender }, // Include 'role' in the response
     });
   } catch (error) {
     next(error);

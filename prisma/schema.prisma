@@ -20,23 +20,12 @@ model Candidate {
   email     String    @unique
   password  String
   gender    String
+  role      Role
   status    CandidateStatus?  @default(PENDING)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   appliedJobs Job[]   @relation("AppliedJobs")
    @@map("candidate")
-}
-
-model Applicant {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  email     String    @unique
-  password  String
-  gender    String
-  status    CandidateStatus?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 }
 
 model Admin {
@@ -51,7 +40,8 @@ model Job {
   title       String
   description String
   location    String
-  salary      Float?
+  salary      String
+  companyName String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   recruiter   Recruiter @relation("RecruiterJobs", fields: [recruiterId], references: [id])
@@ -67,10 +57,11 @@ model Recruiter {
   email     String    @unique
   password  String
   gender    String
+  role      Role      // No @default directive needed here
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   jobs      Job[]     @relation("RecruiterJobs")
-  @@map("recruiter")
+  @@map("recruiters")
 }
 
 enum CandidateStatus {
@@ -78,4 +69,9 @@ enum CandidateStatus {
   REJECTED
   SELECTED
   PENDING
+}
+
+enum Role {
+  RECRUITER
+  CANDIDATE
 }
