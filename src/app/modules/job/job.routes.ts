@@ -9,12 +9,13 @@ const router = express.Router();
 
 router.post(
   '/create',
+  authMiddleware,
   validateRequest(JobValidation.create),
   JobController.create,
 );
 
-router.get('/all', JobController.getAllJobs);
-router.get('/:id', JobController.getJobById);
+router.get('/all', authMiddleware, JobController.getAllJobs);
+router.get('/:id', authMiddleware, JobController.getJobById);
 router.put(
   '/update/:id',
   authMiddleware,

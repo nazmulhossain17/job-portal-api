@@ -14,26 +14,38 @@ datasource db {
 }
 
 model Candidate {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  email     String    @unique
-  password  String
-  gender    String
-  role      Role
-  status    CandidateStatus?  @default(PENDING)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  appliedJobs Job[]   @relation("AppliedJobs")
-   @@map("candidate")
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName           String
+  lastName            String
+  email               String    @unique
+  password            String
+  gender              String
+  role                Role
+  status              CandidateStatus?  @default(PENDING)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  appliedJobs         Job[]   @relation("AppliedJobs")
+  failedLoginAttempts Int      @default(0)
+  isLocked            Boolean  @default(false)
+  lockUntil           DateTime?
+  resetPasswordOTP    String?
+  resetPasswordExpires DateTime?
+  @@map("candidate")
 }
 
+
 model Admin {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String    @unique
-  password  String
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  email               String   @unique
+  password            String
+  failedLoginAttempts Int      @default(0)
+  isLocked            Boolean  @default(false)
+  lockUntil           DateTime?
+  resetPasswordOTP    String?
+  resetPasswordExpires DateTime?
 }
+
 
 model Job {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -51,18 +63,32 @@ model Job {
 }
 
 model Recruiter {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  email     String    @unique
-  password  String
-  gender    String
-  role      Role      // No @default directive needed here
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  jobs      Job[]     @relation("RecruiterJobs")
+  id                  String      @id @default(auto()) @map("_id") @db.ObjectId
+  firstName           String
+  lastName            String
+  email               String      @unique
+  password            String
+  gender              String
+  role                Role        // No @default directive needed here
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  jobs                Job[]       @relation("RecruiterJobs")
+  failedLoginAttempts Int         @default(0)
+  isLocked            Boolean     @default(false)
+  lockUntil           DateTime?
+  resetPasswordOTP    String?    
+  resetPasswordExpires DateTime?   
   @@map("recruiters")
 }
+
+
+model IpBlock {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  ipAddress  String    @unique
+  attempts   Int
+  lockUntil  DateTime?
+}
+
 
 enum CandidateStatus {
   SHORTLISTED
